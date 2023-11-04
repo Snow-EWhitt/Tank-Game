@@ -2,6 +2,7 @@ version: "3"
 services:
   tank-battles-client:
     build: .
+    container_name: tank-battles-client
     restart: unless-stopped
 
   tank-battles-swag:
