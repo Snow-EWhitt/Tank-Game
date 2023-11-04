@@ -1,0 +1,6 @@
+version: '3'
+services:
+  client:
+    build: .
+    ports:
+    - 0.0.0.0:10007:80
