@@ -16,7 +16,7 @@ services:
       - URL=tankbattles.duckdns.org
       - VALIDATION=duckdns
       - DUCKDNSTOKEN=${DUCKDNSTOKEN}
-      - STAGING=true
+      - STAGING=false
     volumes:
       - /home/ethan/data/tank-game-swag:/config
       - ./swag-default.conf:/config/nginx/site-confs/default.conf
