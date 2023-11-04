@@ -2,5 +2,23 @@ version: '3'
 services:
   client:
     build: .
+    restart: unless-stopped
+  
+  swag:
+    image: lscr.io/linuxserver/swag
+    container_name: ethan-tank-game-swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+      - URL=<duckdns domain here>
+      - VALIDATION=duckdns
+      - STAGING=false
+    volumes:
+      - /home/ethan/data/tank-game-swag:/config
+      - ./swag-default.conf:/config/nginx/site-confs/default.conf
     ports:
     - 0.0.0.0:10007:80
+    restart: unless-stopped

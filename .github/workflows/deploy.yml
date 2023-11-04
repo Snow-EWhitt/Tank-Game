@@ -1,4 +1,6 @@
 name: Deploy tank game
+env:
+  DUCKDNSTOKEN: ${{ secrets.DUCKDNSTOKEN }}
 on: [push, workflow_dispatch]
 jobs:
   deploy-application:
