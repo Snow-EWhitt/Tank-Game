@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/home/home';
 import { Navbar } from './components/Navbar';
 import "bootstrap";
+import "./assests/custom.scss";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
