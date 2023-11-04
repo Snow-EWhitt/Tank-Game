@@ -13,12 +13,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Denver
-      - URL=<duckdns domain here>
+      - URL=tankbattles.duckdns.org
       - VALIDATION=duckdns
+      - DUCKDNSTOKEN=${DUCKDNSTOKEN}
       - STAGING=false
     volumes:
       - /home/ethan/data/tank-game-swag:/config
       - ./swag-default.conf:/config/nginx/site-confs/default.conf
     ports:
-    - 0.0.0.0:10007:80
+    - 0.0.0.0:10007:443
     restart: unless-stopped
