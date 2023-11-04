@@ -1,4 +1,4 @@
-name: Deploy tank game
+name: Deploy Tank Battles
 env:
   DUCKDNSTOKEN: ${{ secrets.DUCKDNSTOKEN }}
 on: [push, workflow_dispatch]
