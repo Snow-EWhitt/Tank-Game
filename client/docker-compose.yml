@@ -5,6 +5,12 @@ services:
     container_name: tank-battles-client
     restart: unless-stopped
 
+  tank-battles-api:
+    build: ../api
+    container_name: tank-battles-api
+    volumes:
+      - /home/ethan/data/tank-battles-api-storage:/app/storage
+
   tank-battles-swag:
     image: lscr.io/linuxserver/swag
     container_name: tank-battles-swag
