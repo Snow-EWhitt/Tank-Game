@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/home/home';
 import { Navbar } from './components/Navbar';
 import "bootstrap";
 import "./assets/custom.scss";
+import TankContextProvider from './components/Tank/TankContext';
+import { StartGame } from './pages/startGame/StartGame';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,16 +15,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
+    <TankContextProvider>
     <Router>
       <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<StartGame />} />
+          <Route path="/Game" element={<Home />} />
         </Routes>
       </Router>
+    </TankContextProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
