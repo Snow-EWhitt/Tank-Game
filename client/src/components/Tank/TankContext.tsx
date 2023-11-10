@@ -10,7 +10,7 @@ export const TankContext = createContext<TankContextType>({
 });
 
 const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [tanks, setTanks] = useState([]);
+  const [tanks, _setTanks] = useState([]);
   
   const startingValue: TankContextType = {
     tanks,
