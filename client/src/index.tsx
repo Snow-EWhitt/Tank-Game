@@ -6,7 +6,6 @@ import { Home } from "./pages/home/home";
 import { Navbar } from "./components/Navbar";
 import "bootstrap";
 import "./assets/custom.scss";
-import TankContextProvider from "./components/Tank/TankContext";
 import { StartGame } from "./pages/startGame/StartGame";
 
 const root = ReactDOM.createRoot(
