@@ -12,6 +12,11 @@ export interface TankType {
   movingBackward: boolean;
   turningRight: boolean;
   turningLeft: boolean;
+
+  barrelRotation: number;
+
+  turningBarrelRight: boolean;
+  turningBarrelLeft: boolean;
 }
 
 export const Tank: FC<{ barrelOrientation: number }> = ({

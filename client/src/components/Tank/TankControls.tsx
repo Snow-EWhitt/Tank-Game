@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect } from "react";
 import { Tank } from "./Tank";
+import { TankContext } from "./TankContext";
 
 interface TankControlsType {
   forwardKey: string;
@@ -11,9 +12,6 @@ interface TankControlsType {
   turnBarrelLeftKey: string;
 }
 
-const speedConstant = 1;
-const rotationConstant = 0.5;
-
 export const TankControls: FC<TankControlsType> = ({
   forwardKey,
   backwardKey,
@@ -22,105 +20,88 @@ export const TankControls: FC<TankControlsType> = ({
   turnBarrelRightKey,
   turnBarrelLeftKey,
 }) => {
-  const [position, setPosition] = useState({ X: 0, Y: 0 });
-  const [orientation, setOrientation] = useState(0);
-  const [movingForward, setMovingForward] = useState(false);
-  const [movingBackward, setMovingBackward] = useState(false);
-  const [turningRight, setTurningRight] = useState(false);
-  const [turningLeft, setTurningLeft] = useState(false);
+  const tankContext = useContext(TankContext);
+  const tank = tankContext.tanks.find((t) => t.id === 0);
 
-  const [turningBarrelRight, setTurningBarrelRight] = useState(false);
-  const [turningBarrelLeft, setTurningBarrelLeft] = useState(false);
-  const [barrelOrientation, setBarrelOrientation] = useState(0);
+  useEffect(() => {
+    if (!tank) {
+      tankContext.addTank(0);
+    }
+  }, [tankContext, tank]);
 
   useEffect(() => {
     const keyDownListener = (event: KeyboardEvent) => {
-      if (event.key === forwardKey) setMovingForward(true);
-      if (event.key === backwardKey) setMovingBackward(true);
-      if (event.key === turnRightKey) setTurningRight(true);
-      if (event.key === turnLeftKey) setTurningLeft(true);
-
-      if (event.key === turnBarrelRightKey) setTurningBarrelRight(true);
-      if (event.key === turnBarrelLeftKey) setTurningBarrelLeft(true);
+      if (event.key === forwardKey) {
+        tankContext.updateTank(0, "moveForward");
+      }
+      if (event.key === backwardKey) {
+        tankContext.updateTank(0, "moveBackward");
+      }
+      if (event.key === turnRightKey) {
+        tankContext.updateTank(0, "turnRight");
+      }
+      if (event.key === turnLeftKey) {
+        tankContext.updateTank(0, "turnLeft");
+      }
+      if (event.key === turnBarrelRightKey) {
+        tankContext.updateTank(0, "turnBarrelRight");
+      }
+      if (event.key === turnBarrelLeftKey) {
+        tankContext.updateTank(0, "turnBarrelLeft");
+      }
     };
     const keyUpListener = (event: KeyboardEvent) => {
-      if (event.key === forwardKey) setMovingForward(false);
-      if (event.key === backwardKey) setMovingBackward(false);
-      if (event.key === turnRightKey) setTurningRight(false);
-      if (event.key === turnLeftKey) setTurningLeft(false);
-
-      if (event.key === turnBarrelRightKey) setTurningBarrelRight(false);
-      if (event.key === turnBarrelLeftKey) setTurningBarrelLeft(false);
-    };
-    const updateTank = () => {
-      if (movingForward)
-        setPosition((oldPosition) => ({
-          X:
-            oldPosition.X +
-            speedConstant * Math.sin((orientation * Math.PI) / 180),
-          Y:
-            oldPosition.Y -
-            speedConstant * Math.cos((orientation * Math.PI) / 180),
-        }));
-      if (movingBackward)
-        setPosition((oldPosition) => ({
-          X:
-            oldPosition.X -
-            speedConstant * Math.sin((orientation * Math.PI) / 180),
-          Y:
-            oldPosition.Y +
-            speedConstant * Math.cos((orientation * Math.PI) / 180),
-        }));
-      if (turningRight)
-        setOrientation((oldOrientation) => oldOrientation + rotationConstant);
-      if (turningLeft)
-        setOrientation((oldOrientation) => oldOrientation - rotationConstant);
-
-      if (turningBarrelRight)
-        setBarrelOrientation(
-          (oldOrientation) => oldOrientation + rotationConstant
-        );
-      if (turningBarrelLeft)
-        setBarrelOrientation(
-          (oldBarrelOrientation) => oldBarrelOrientation - rotationConstant
-        );
+      if (event.key === forwardKey) {
+        tankContext.updateTank(0, "stopForward");
+      }
+      if (event.key === backwardKey) {
+        tankContext.updateTank(0, "stopBackward");
+      }
+      if (event.key === turnRightKey) {
+        tankContext.updateTank(0, "stopRight");
+      }
+      if (event.key === turnLeftKey) {
+        tankContext.updateTank(0, "stopLeft");
+      }
+      if (event.key === turnBarrelRightKey) {
+        tankContext.updateTank(0, "stopBarrelRight");
+      }
+      if (event.key === turnBarrelLeftKey) {
+        tankContext.updateTank(0, "stopBarrelLeft");
+      }
     };
 
     window.addEventListener("keydown", keyDownListener);
     window.addEventListener("keyup", keyUpListener);
-    const timerId = window.setInterval(updateTank, 10);
 
     return () => {
       window.removeEventListener("keydown", keyDownListener);
       window.removeEventListener("keyup", keyUpListener);
-      window.clearInterval(timerId);
     };
   }, [
+    tankContext,
     forwardKey,
     backwardKey,
     turnRightKey,
     turnLeftKey,
-    movingForward,
-    movingBackward,
-    turningRight,
-    turningLeft,
-    orientation,
     turnBarrelRightKey,
     turnBarrelLeftKey,
-    turningBarrelRight,
-    turningBarrelLeft,
   ]);
+
+  if (!tank) {
+    return <div>An error has occured.</div>;
+  }
 
   return (
     <div
       style={{
-        top: position.Y,
-        left: position.X,
-        rotate: `${orientation}deg`,
+        top: `${tank.yPosition}px`,
+        left: `${tank.xPosition}px`,
+        rotate: `${tank.rotation}deg`,
         position: "absolute",
       }}
     >
-      <Tank barrelOrientation={barrelOrientation} />
+      <Tank barrelOrientation={tank.barrelRotation} />
     </div>
   );
 };
