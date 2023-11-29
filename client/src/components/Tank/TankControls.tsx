@@ -1,6 +1,5 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Tank } from "./Tank";
-import { TankContext } from "./TankContext";
 
 interface TankControlsType {
   forwardKey: string;
@@ -33,9 +32,6 @@ export const TankControls: FC<TankControlsType> = ({
   const [turningBarrelRight, setTurningBarrelRight] = useState(false);
   const [turningBarrelLeft, setTurningBarrelLeft] = useState(false);
   const [barrelOrientation, setBarrelOrientation] = useState(0);
-
-  const tankContext = useContext(TankContext);
-  const tank = tankContext.tanks[0];
 
   useEffect(() => {
     const keyDownListener = (event: KeyboardEvent) => {
