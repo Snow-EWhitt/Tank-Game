@@ -1,4 +1,5 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
+import { TankGun } from "./TankGun";
 
 export interface TankType {
   id: number;
@@ -6,15 +7,30 @@ export interface TankType {
   xPosition: number;
   yPosition: number;
   rotation: number;
+
+  movingForward: boolean;
+  movingBackward: boolean;
+  turningRight: boolean;
+  turningLeft: boolean;
 }
 
-export const Tank: FC<{ children: ReactNode }> = ({ children }) => {
+export const Tank: FC<{ barrelOrientation: number }> = ({
+  barrelOrientation,
+}) => {
   return (
     <div
       className="bg-success bg-gradient position-relative"
       style={{ height: "75px", width: "50px" }}
     >
-      {children}
+      <div
+        style={{
+          rotate: `${barrelOrientation}deg`,
+          position: "absolute",
+          bottom: "0",
+        }}
+      >
+        <TankGun />
+      </div>
     </div>
   );
 };
