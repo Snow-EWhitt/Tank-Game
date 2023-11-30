@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect } from "react";
 import { Tank } from "./Tank";
 import { TankContext } from "./TankContext";
+import { Projectile } from "./Projectile";
 
 interface TankControlsType {
   forwardKey: string;
@@ -10,6 +11,8 @@ interface TankControlsType {
 
   turnBarrelRightKey: string;
   turnBarrelLeftKey: string;
+
+  fireGunKey: string;
 }
 
 export const TankControls: FC<TankControlsType> = ({
@@ -19,12 +22,16 @@ export const TankControls: FC<TankControlsType> = ({
   turnLeftKey,
   turnBarrelRightKey,
   turnBarrelLeftKey,
+  fireGunKey,
 }) => {
   const tankContext = useContext(TankContext);
   const tank = tankContext.tanks.find((t) => t.id === 0);
 
   useEffect(() => {
+    // console.log("Hi");
+    
     if (!tank) {
+      // console.log("Added tank.");
       tankContext.addTank(0);
     }
   }, [tankContext, tank]);
@@ -49,7 +56,12 @@ export const TankControls: FC<TankControlsType> = ({
       if (event.key === turnBarrelLeftKey) {
         tankContext.updateTank(0, "turnBarrelLeft");
       }
+      if (event.key === fireGunKey) {
+        if (!event.repeat)
+          tankContext.updateTank(0, "fireGun");
+      }
     };
+
     const keyUpListener = (event: KeyboardEvent) => {
       if (event.key === forwardKey) {
         tankContext.updateTank(0, "stopForward");
@@ -86,22 +98,38 @@ export const TankControls: FC<TankControlsType> = ({
     turnLeftKey,
     turnBarrelRightKey,
     turnBarrelLeftKey,
+    fireGunKey,
   ]);
 
   if (!tank) {
-    return <div>An error has occured.</div>;
+    return <p>An error has occured.</p>;
   }
 
   return (
-    <div
-      style={{
-        top: `${tank.yPosition}px`,
-        left: `${tank.xPosition}px`,
-        rotate: `${tank.rotation}deg`,
-        position: "absolute",
-      }}
-    >
-      <Tank barrelOrientation={tank.barrelRotation} />
-    </div>
+    <>
+      <div
+        style={{
+          top: `${tank.yPosition}px`,
+          left: `${tank.xPosition}px`,
+          rotate: `${tank.rotation}deg`,
+          position: "absolute",
+        }}
+      >
+        <Tank barrelOrientation={tank.barrelRotation} />
+      </div>
+      {tankContext.projectiles.map((p) => (
+        <div
+          // key={p.id}
+          style={{
+            top: `${p.yPosition}px`,
+            left: `${p.xPosition}px`,
+            rotate: `${p.rotation}deg`,
+            position: "absolute",
+          }}
+        >
+          <Projectile />
+        </div>
+      ))}
+    </>
   );
 };

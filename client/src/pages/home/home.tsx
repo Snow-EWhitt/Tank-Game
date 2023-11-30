@@ -8,7 +8,7 @@ export const Home = () => {
         <div className="row mt-4 justify-content-center">
           <div
             className="col-auto bg-white position-relative"
-            style={{ width: "75%", aspectRatio: 16 / 9 }}
+            style={{ width: "1000px", height: "500px" }}
           >
             <TankControls
               forwardKey="w"
@@ -17,6 +17,7 @@ export const Home = () => {
               turnLeftKey="a"
               turnBarrelRightKey="e"
               turnBarrelLeftKey="q"
+              fireGunKey=" "
             />
           </div>
         </div>
