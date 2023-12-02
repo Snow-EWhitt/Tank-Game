@@ -6,7 +6,8 @@ import { Home } from "./pages/home/home";
 import { Navbar } from "./components/Navbar";
 import "bootstrap";
 import "./assets/custom.scss";
-import { StartGame } from "./pages/startGame/StartGame";
+import { StartGamePage } from "./pages/startGame/StartGamePage";
+import TankContextProvider from "./components/Tank/TankContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,12 +15,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<StartGame />} />
-        <Route path="/Game" element={<Home />} />
-      </Routes>
-    </Router>
+    <TankContextProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<StartGamePage />} />
+          <Route path="/Game" element={<Home />} />
+        </Routes>
+      </Router>
+    </TankContextProvider>
   </React.StrictMode>
 );

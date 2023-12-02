@@ -1,9 +1,9 @@
+import Constants from "../../Constants";
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { TankType } from "./Tank";
 import { ProjectileType } from "./Projectile";
-
-const speedConstant = 1;
-const rotationConstant = 0.5;
+import { moveTank } from "./TankLogic";
+import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
 
 export interface TankContextType {
   tanks: TankType[];
@@ -28,108 +28,56 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setTanks((oldTanks) => oldTanks.map((t) => moveTank(t)));
     };
 
-    const moveTank = (tank: TankType) => {
-      const potentialNextPosition = tank.movingForward
-        ? tankMovedForward(tank)
-        : tank.movingBackward
-        ? tankMovedBackward(tank)
-        : tank;
-
-      const inBoundsNextMove =
-        potentialNextPosition.xPosition > 0 &&
-        potentialNextPosition.xPosition < 1000 - 50 &&
-        potentialNextPosition.yPosition > 0 &&
-        potentialNextPosition.yPosition < 500 - 75;
-
-      const nextPosition = inBoundsNextMove ? potentialNextPosition : tank;
-
-      const rotationAdjustedTank = nextPosition.turningLeft
-        ? tankTurnedLeft(nextPosition)
-        : nextPosition.turningRight
-        ? tankTurnedRight(nextPosition)
-        : nextPosition;
-
-      const barrelAdjustedTank = rotationAdjustedTank.turningBarrelLeft
-        ? barrelTurnedLeft(rotationAdjustedTank)
-        : rotationAdjustedTank.turningBarrelRight
-        ? barrelTurnedRight(rotationAdjustedTank)
-        : rotationAdjustedTank;
-
-      return barrelAdjustedTank;
-    };
-
     const moveProjectiles = () => {
       setProjectiles((oldProjectiles) => {
         const newPositions = oldProjectiles.map((p) => moveProjectile(p));
 
-        return newPositions.filter(
-          (p) =>
-            p.xPosition > 0 &&
-            p.xPosition < 1000 &&
-            p.yPosition > 0 &&
-            p.yPosition < 500
-        );
+        return newPositions.filter((p) => projectileIsInBounds(p));
       });
     };
-
-    const moveProjectile = (p: ProjectileType) => ({
-      ...p,
-      xPosition:
-        p.xPosition + speedConstant * Math.sin((p.rotation * Math.PI) / 180),
-      yPosition:
-        p.yPosition - speedConstant * Math.cos((p.rotation * Math.PI) / 180),
-    });
 
     const intervalId = window.setInterval(() => {
       moveTanks();
       moveProjectiles();
-    }, 10);
+    }, Constants.refreshRate);
 
     return () => window.clearInterval(intervalId);
   }, []);
 
-  const tankMovedForward = (t: TankType) => ({
-    ...t,
-    xPosition:
-      t.xPosition + speedConstant * Math.sin((t.rotation * Math.PI) / 180),
-    yPosition:
-      t.yPosition - speedConstant * Math.cos((t.rotation * Math.PI) / 180),
-  });
+  useEffect(() => {
+    projectiles.forEach((p) => {
+      tanks.forEach((t) => {
+        if (p.tankId !== t.id) {
+          const centeredProjectile = {
+            X: p.xPosition + Constants.projectileWidth,
+            Y: p.yPosition + Constants.projectileHeight,
+          };
 
-  const tankMovedBackward = (t: TankType) => ({
-    ...t,
-    xPosition:
-      t.xPosition - speedConstant * Math.sin((t.rotation * Math.PI) / 180),
-    yPosition:
-      t.yPosition + speedConstant * Math.cos((t.rotation * Math.PI) / 180),
-  });
+          const centeredTank = {
+            X: t.xPosition + Constants.tankWidth / 2,
+            Y: t.yPosition + Constants.tankHeight / 2,
+          };
 
-  const tankTurnedLeft = (t: TankType) => ({
-    ...t,
-    rotation: t.rotation - rotationConstant,
-  });
+          const deltaX = Math.abs(centeredProjectile.X - centeredTank.X);
+          const deltaY = Math.abs(centeredProjectile.Y - centeredTank.Y);
 
-  const tankTurnedRight = (t: TankType) => ({
-    ...t,
-    rotation: t.rotation + rotationConstant,
-  });
-
-  const barrelTurnedLeft = (t: TankType) => ({
-    ...t,
-    barrelRotation: t.barrelRotation - rotationConstant,
-  });
-
-  const barrelTurnedRight = (t: TankType) => ({
-    ...t,
-    barrelRotation: t.barrelRotation + rotationConstant,
-  });
+          if (deltaX + deltaY < Constants.tankProximity) {
+            setTanks((oldTanks) => oldTanks.filter((tank) => tank.id !== t.id));
+            setProjectiles((oldProjectiles) =>
+              oldProjectiles.filter((projectile) => projectile.id !== p.id)
+            );
+          }
+        }
+      });
+    });
+  }, [tanks, projectiles]);
 
   const addTank = (id: number) => {
     const newTank: TankType = {
       id,
 
-      xPosition: 0,
-      yPosition: 0,
+      xPosition: 100,
+      yPosition: 100,
       rotation: 0,
 
       movingForward: false,
@@ -143,19 +91,34 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
       turningBarrelLeft: false,
     };
 
-    setTanks((oldTanks) => [...oldTanks, newTank]);
+    setTanks((oldTanks) => {
+      if (!oldTanks.find((t) => t.id === newTank.id))
+        return [...oldTanks, newTank];
+
+      return oldTanks;
+    });
   };
 
   const addProjectile = (tank: TankType) => {
-    const newProjectile: ProjectileType = {
-      id: projectiles.length,
-      tankId: tank.id,
-      xPosition: tank.xPosition + 25,
-      yPosition: tank.yPosition + 37,
-      rotation: tank.rotation + tank.barrelRotation,
-    };
+    setProjectiles((oldProjectiles) => {
+      const oldProjectileIds = oldProjectiles.map((p) => p.id);
+      const largestId = oldProjectileIds.length
+        ? Math.max(...oldProjectileIds)
+        : 0;
 
-    setProjectiles((oldProjectiles) => [...oldProjectiles, newProjectile]);
+      const newProjectile: ProjectileType = {
+        id: largestId + 1,
+        tankId: tank.id,
+        xPosition: tank.xPosition + 25,
+        yPosition: tank.yPosition + 37,
+        rotation: tank.rotation + tank.barrelRotation,
+      };
+
+      if (!oldProjectiles.find((p) => p.id === newProjectile.id))
+        return [...oldProjectiles, newProjectile];
+
+      return oldProjectiles;
+    });
   };
 
   const updateTank = (id: number, tankAction: string) => {

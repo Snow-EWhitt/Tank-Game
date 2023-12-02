@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { TankGun } from "./TankGun";
+import Constants from "../../Constants";
 
 export interface TankType {
   id: number;
@@ -25,7 +26,7 @@ export const Tank: FC<{ barrelOrientation: number }> = ({
   return (
     <div
       className="bg-success bg-gradient position-relative"
-      style={{ height: "75px", width: "50px" }}
+      style={{ width: `${Constants.tankWidth}px`, height: `${Constants.tankHeight}px` }}
     >
       <div
         style={{
