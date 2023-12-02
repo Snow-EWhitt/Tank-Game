@@ -7,6 +7,7 @@ export const StartGamePage = () => {
   const tankContext = useContext(TankContext);
 
   const startGame = () => {
+    tankContext.resetTanks();
     tankContext.addTank(0);
     tankContext.addTank(1);
 

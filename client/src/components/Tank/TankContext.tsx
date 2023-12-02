@@ -7,6 +7,7 @@ import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
 
 export interface TankContextType {
   tanks: TankType[];
+  resetTanks: () => void;
   addTank: (id: number) => void;
   updateTank: (id: number, action: string) => void;
   projectiles: ProjectileType[];
@@ -14,6 +15,7 @@ export interface TankContextType {
 
 export const TankContext = createContext<TankContextType>({
   tanks: [],
+  resetTanks: () => {},
   addTank: () => {},
   updateTank: () => {},
   projectiles: [],
@@ -71,6 +73,10 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
       });
     });
   }, [tanks, projectiles]);
+
+  const resetTanks = () => {
+    setTanks([]);
+  };
 
   const addTank = (id: number) => {
     const newTank: TankType = {
@@ -173,6 +179,7 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const startingValue: TankContextType = {
     tanks,
+    resetTanks,
     addTank,
     updateTank,
     projectiles,
