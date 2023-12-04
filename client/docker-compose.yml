@@ -11,32 +11,6 @@ services:
     volumes:
       - /home/ethan/data/tank-battles-api-storage:/app/storage
 
-  # tank-battles-keycloak:
-  #   container_name: tank-battles-keycloak
-  #   image: bitnami/keycloak
-  #   environment:
-  #     - KEYCLOAK_ADMIN_USER=${KEYCLOAK_ADMIN_USER}
-  #     - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASS}
-  #     - KEYCLOAK_DATABASE_HOST=tank-battles-keycloak-database
-  #     - KEYCLOAK_DATABASE_NAME=keycloak
-  #     - KEYCLOAK_DATABASE_USER=${KEYCLOAK_DATABASE_USER}
-  #     - KEYCLOAK_DATABASE_PASSWORD=${KEYCLOAK_DATABASE_PASS}
-  #     - KEYCLOAK_EXTRA_ARGS=" --hostname-url=https://tankbattles.duckdns.org:10101 "
-  #     - KC_HOSTNAME_URL=https://tankbattles.duckdns.org:10101
-  #     - KC_PROXY=edge
-  #   restart: unless-stopped
-
-  # tank-battles-keycloak-database:
-  #   container_name: tank-battles-keycloak-database
-  #   image: postgres
-  #   environment:
-  #     - POSTGRES_USER=${KEYCLOAK_DATABASE_USER}
-  #     - POSTGRES_PASSWORD=${KEYCLOAK_DATABASE_PASS}
-  #     - POSTGRES_DB=keycloak
-  #   volumes:
-  #     - /home/ethan/data/tank-battles-keycloak-storage:/var/lib/postgresql/data
-  #   restart: unless-stopped
-
   tank-battles-swag:
     image: lscr.io/linuxserver/swag
     container_name: tank-battles-swag
@@ -55,4 +29,50 @@ services:
       - ./swag-default.conf:/config/nginx/site-confs/default.conf
     ports:
     - 0.0.0.0:10007:443
+    restart: unless-stopped
+
+  tank-battles-keycloak:
+    container_name: tank-battles-keycloak
+    image: bitnami/keycloak
+    environment:
+      - KEYCLOAK_ADMIN_USER=${KEYCLOAK_ADMIN_USER}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASS}
+      - KEYCLOAK_DATABASE_HOST=tank-battles-keycloak-database
+      - KEYCLOAK_DATABASE_NAME=keycloak
+      - KEYCLOAK_DATABASE_USER=${KEYCLOAK_DATABASE_USER}
+      - KEYCLOAK_DATABASE_PASSWORD=${KEYCLOAK_DATABASE_PASS}
+      - KEYCLOAK_EXTRA_ARGS=" --hostname-url=https://tankbattleskeycloak.duckdns.org:10101 "
+      - KC_HOSTNAME_URL=https://tankbattleskeycloak.duckdns.org:10101
+      - KC_PROXY=edge
+    restart: unless-stopped
+
+  tank-battles-keycloak-database:
+    container_name: tank-battles-keycloak-database
+    image: postgres
+    environment:
+      - POSTGRES_USER=${KEYCLOAK_DATABASE_USER}
+      - POSTGRES_PASSWORD=${KEYCLOAK_DATABASE_PASS}
+      - POSTGRES_DB=keycloak
+    volumes:
+      - /home/ethan/data/tank-battles-keycloak-storage:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  tank-battles-keycloak-swag:
+    image: lscr.io/linuxserver/swag
+    container_name: tank-battles-keycloak-swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+      - URL=tankbattleskeycloak.duckdns.org
+      - VALIDATION=duckdns
+      - DUCKDNSTOKEN=${DUCKDNSTOKEN}
+      - STAGING=false
+    volumes:
+      - /home/ethan/data/keycloak-swag:/config
+      - ./swag-keycloak-default.conf:/config/nginx/site-confs/default.conf
+    ports:
+    - 0.0.0.0:10101:443
     restart: unless-stopped
