@@ -1,6 +1,10 @@
 name: Deploy Tank Battles
 env:
   DUCKDNSTOKEN: ${{ secrets.DUCKDNSTOKEN }}
+  KEYCLOAK_ADMIN_USER: ${{ secrets.KEYCLOAK_ADMIN_USER }}
+  KEYCLOAK_ADMIN_PASSWORD: ${{ secrets.KEYCLOAK_ADMIN_PASS }}
+  KEYCLOAK_DATABASE_USER: ${{ secrets.KEYCLOAK_DATABASE_USER }}
+  KEYCLOAK_DATABASE_PASS: ${{ secrets.KEYCLOAK_DATABASE_PASS }}
 on: [push, workflow_dispatch]
 jobs:
   deploy-application:
