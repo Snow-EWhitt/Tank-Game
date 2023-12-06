@@ -10,6 +10,7 @@ import { Navbar } from "./components/Navbar";
 import { StartGamePage } from "./pages/startGame/StartGamePage";
 import { AuthProvider } from "react-oidc-context";
 import { WebStorageStateStore } from "oidc-client-ts";
+import { AuthRequired } from "./AuthRequired";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -29,13 +30,15 @@ root.render(
   <React.StrictMode>
     <AuthProvider {...oidcConfig}>
       <TankContextProvider>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<StartGamePage />} />
-            <Route path="/Game" element={<Home />} />
-          </Routes>
-        </Router>
+        <AuthRequired>
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<StartGamePage />} />
+              <Route path="/Game" element={<Home />} />
+            </Routes>
+          </Router>
+        </AuthRequired>
       </TankContextProvider>
     </AuthProvider>
   </React.StrictMode>
