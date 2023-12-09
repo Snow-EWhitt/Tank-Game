@@ -4,9 +4,11 @@ import { ProjectileType } from "./Projectile";
 import { moveTank } from "./TankLogic";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
 import { TankContextType } from "../../contextTypes";
-import Constants from "../../pages/constants";
+import Constants, { GameState } from "../../pages/constants";
 
 export const TankContext = createContext<TankContextType>({
+  state: GameState.Joining,
+  updateState: () => {},
   tanks: [],
   addTank: () => {},
   updateTank: () => {},
@@ -15,6 +17,7 @@ export const TankContext = createContext<TankContextType>({
 });
 
 const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [state, setState] = useState<GameState>(GameState.Joining);
   const [tanks, setTanks] = useState<TankType[]>([]);
   const [projectiles, setProjectiles] = useState<ProjectileType[]>([]);
 
@@ -69,6 +72,10 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const resetTanks = () => {
     setTanks([]);
+  };
+
+  const updateState = (state: GameState) => {
+    setState(state);
   };
 
   const addTank = (id: number) => {
@@ -171,6 +178,8 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const startingValue: TankContextType = {
+    state,
+    updateState,
     tanks,
     addTank,
     updateTank,

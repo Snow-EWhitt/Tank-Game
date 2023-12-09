@@ -23,4 +23,10 @@ export const enum MessageTypes {
   UpdateVehicle,
 }
 
+export const enum GameState {
+  Joining,
+  Playing,
+  Ended,
+}
+
 export default Constants;

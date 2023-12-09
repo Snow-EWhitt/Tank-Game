@@ -2,12 +2,18 @@ import { useContext } from "react";
 import { ProjectileRenderer } from "../../components/ProjectileRenderer";
 import { TankRenderer } from "../../components/TankRenderer";
 import { TankContext } from "../../components/Tank/TankContext";
-import { MatchEndPage } from "../matchEnd/MatchEndPage";
+import { MatchEnd } from "../matchEnd/MatchEnd";
 import Constants from "../constants";
+import { useNavigate } from "react-router-dom";
 
 export const LocalMatch = () => {
   const tankContext = useContext(TankContext);
+  const navigate = useNavigate();
   const tanks = tankContext.tanks;
+
+  const playAgain = () => {
+    navigate("/Local");
+  };
 
   return (
     <div className="container">
@@ -26,9 +32,7 @@ export const LocalMatch = () => {
         </div>
       )}
 
-      {tanks.length === 1 && (
-        <MatchEndPage winner={tanks[0]} />
-      )}
+      {tanks.length === 1 && <MatchEnd winner={tanks[0]} handler={playAgain} />}
     </div>
   );
 };

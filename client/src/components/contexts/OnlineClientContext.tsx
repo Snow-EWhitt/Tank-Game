@@ -6,7 +6,7 @@ import {
   UpdateVehicleMessage,
   VehicleStateMessage,
 } from "./OnlineHostContext";
-import { MessageTypes } from "../../pages/constants";
+import { GameState, MessageTypes } from "../../pages/constants";
 import {
   FC,
   ReactNode,
@@ -20,6 +20,8 @@ import * as signalR from "@microsoft/signalr";
 import { ProjectileType } from "../Tank/Projectile";
 
 export const OnlineClientContext = createContext<TankContextType>({
+  state: GameState.Joining,
+  updateState: () => {},
   tanks: [],
   addTank: () => {},
   updateTank: () => {},
@@ -30,16 +32,19 @@ export const OnlineClientContext = createContext<TankContextType>({
 const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const [state, _setState] = useState<GameState>(GameState.Joining);
   const [tanks, setTanks] = useState<TankType[]>([]);
   const [projectiles, setProjectiles] = useState<ProjectileType[]>([]);
   const connection = useRef<signalR.HubConnection | null>(null);
-
-  // const { events } = Connector();
 
   useEffect(() => {
     connection.current = new signalR.HubConnectionBuilder()
       .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
       .build();
+
+    // connection.current = new signalR.HubConnectionBuilder()
+    //   .withUrl("http://localhost:5186/api/ws")
+    //   .build();
 
     connection.current
       .start()
@@ -74,9 +79,8 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
       connection.current.invoke("NewMessage", message);
   };
 
-  const resetTanks = () => {
-
-  }
+  const resetTanks = () => {};
+  const updateState = () => {};
 
   const addTank = (id: number) => {
     const message: AddVehicleMessage = {
@@ -98,6 +102,8 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
   };
 
   const startingValue: TankContextType = {
+    state,
+    updateState,
     tanks,
     addTank,
     updateTank,

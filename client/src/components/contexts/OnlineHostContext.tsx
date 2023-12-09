@@ -8,12 +8,11 @@ import {
   useState,
 } from "react";
 import { TankContextType } from "../../contextTypes";
-// import Connector from "../../signalr-connection";
 import * as signalR from "@microsoft/signalr";
 import { moveTank } from "../Tank/TankLogic";
 import { ProjectileType } from "../Tank/Projectile";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
-import Constants, { MessageTypes } from "../../pages/constants";
+import Constants, { GameState, MessageTypes } from "../../pages/constants";
 
 export interface GeneralMessage {
   type: MessageTypes;
@@ -37,6 +36,8 @@ export interface VehicleStateMessage {
 }
 
 export const OnlineHostContext = createContext<TankContextType>({
+  state: GameState.Joining,
+  updateState: () => {},
   tanks: [],
   addTank: () => {},
   updateTank: () => {},
@@ -47,16 +48,10 @@ export const OnlineHostContext = createContext<TankContextType>({
 const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const [state, setState] = useState<GameState>(GameState.Joining);
   const [tanks, setTanks] = useState<TankType[]>([]);
-  const [projectiles, setProjectiles] = useState<ProjectileType[]>([])
+  const [projectiles, setProjectiles] = useState<ProjectileType[]>([]);
   const connection = useRef<signalR.HubConnection | null>(null);
-  // const { events } = Connector();
-
-  // useEffect(() => {
-  //   events((message) => setMessage(message));
-  //   console.log(message);
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // })
 
   useEffect(() => {
     const moveTanks = () => {
@@ -71,13 +66,45 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
       });
     };
 
-    const intervalId = window.setInterval(() => {
-      moveTanks();
-      moveProjectiles();
-    }, Constants.refreshRate);
+    if (state === GameState.Playing) {
+      if (tanks.length <= 1) setState(GameState.Ended);
 
-    return () => window.clearInterval(intervalId);
-  }, []);
+      const intervalId = window.setInterval(() => {
+        moveTanks();
+        moveProjectiles();
+      }, Constants.refreshRate);
+
+      return () => window.clearInterval(intervalId);
+    }
+  }, [state, tanks.length]);
+
+  useEffect(() => {
+    projectiles.forEach((p) => {
+      tanks.forEach((t) => {
+        if (p.tankId !== t.id) {
+          const centeredProjectile = {
+            X: p.xPosition + Constants.projectileWidth,
+            Y: p.yPosition + Constants.projectileHeight,
+          };
+
+          const centeredTank = {
+            X: t.xPosition + Constants.tankWidth / 2,
+            Y: t.yPosition + Constants.tankHeight / 2,
+          };
+
+          const deltaX = Math.abs(centeredProjectile.X - centeredTank.X);
+          const deltaY = Math.abs(centeredProjectile.Y - centeredTank.Y);
+
+          if (deltaX + deltaY < Constants.tankProximity) {
+            setTanks((oldTanks) => oldTanks.filter((tank) => tank.id !== t.id));
+            setProjectiles((oldProjectiles) =>
+              oldProjectiles.filter((projectile) => projectile.id !== p.id)
+            );
+          }
+        }
+      });
+    });
+  }, [tanks, projectiles]);
 
   useEffect(() => {
     const message: VehicleStateMessage = {
@@ -91,11 +118,12 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     connection.current = new signalR.HubConnectionBuilder()
-      .withUrl("https://tankbattles.duckdns.org:10007/api/ws", {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
-      })
+      .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
       .build();
+
+    // connection.current = new signalR.HubConnectionBuilder()
+    //   .withUrl("http://localhost:5186/api/ws")
+    //   .build();
 
     connection.current
       .start()
@@ -125,12 +153,16 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
     return () => {
       connection.current?.stop();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sendMessage = (message: string) => {
     if (connection.current?.state === signalR.HubConnectionState.Connected)
       connection.current.invoke("NewMessage", message);
+  };
+
+  const updateState = (state: GameState) => {
+    setState(state);
   };
 
   const addProjectile = (tank: TankType) => {
@@ -237,6 +269,8 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
   };
 
   const startingValue: TankContextType = {
+    state,
+    updateState,
     tanks,
     addTank,
     updateTank,
