@@ -32,7 +32,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<WebSocketHub>("/ws");
+app.MapHub<WebSocketHub>("/api/ws");
 
 // app.MapGet("/", () => "Hello, World!");
 
