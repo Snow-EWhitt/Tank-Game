@@ -16,6 +16,7 @@ import Constants, { GameState, MessageTypes } from "../../pages/constants";
 
 export interface GeneralMessage {
   type: MessageTypes;
+  gameState: GameState;
 }
 
 export interface UpdateVehicleMessage {
@@ -79,6 +80,15 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
   }, [state, tanks.length]);
 
   useEffect(() => {
+    const message: GeneralMessage = {
+      type: MessageTypes.General,
+      gameState: state,
+    };
+
+    sendMessage(JSON.stringify(message));
+  }, [state]);
+
+  useEffect(() => {
     projectiles.forEach((p) => {
       tanks.forEach((t) => {
         if (p.tankId !== t.id) {
@@ -117,13 +127,13 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
   }, [tanks, projectiles]);
 
   useEffect(() => {
-    connection.current = new signalR.HubConnectionBuilder()
-      .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
-      .build();
-
     // connection.current = new signalR.HubConnectionBuilder()
-    //   .withUrl("http://localhost:5186/api/ws")
+    //   .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
     //   .build();
+
+    connection.current = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5186/api/ws")
+      .build();
 
     connection.current
       .start()

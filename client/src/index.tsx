@@ -30,9 +30,9 @@ const oidcConfig = {
 
 root.render(
   <React.StrictMode>
-    <AuthProvider {...oidcConfig}>
+    {/* <AuthProvider {...oidcConfig}> */}
       <TankContextProvider>
-        <AuthRequired>
+        {/* <AuthRequired> */}
           <Router>
             <Navbar />
             <Routes>
@@ -42,8 +42,8 @@ root.render(
               <Route path="/Online" element={<OnlineOptions />} />
             </Routes>
           </Router>
-        </AuthRequired>
+        {/* </AuthRequired> */}
       </TankContextProvider>
-    </AuthProvider>
+    {/* </AuthProvider> */}
   </React.StrictMode>
 );

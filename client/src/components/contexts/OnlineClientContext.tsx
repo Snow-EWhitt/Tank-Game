@@ -32,19 +32,19 @@ export const OnlineClientContext = createContext<TankContextType>({
 const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [state, _setState] = useState<GameState>(GameState.Joining);
+  const [state, setState] = useState<GameState>(GameState.Joining);
   const [tanks, setTanks] = useState<TankType[]>([]);
   const [projectiles, setProjectiles] = useState<ProjectileType[]>([]);
   const connection = useRef<signalR.HubConnection | null>(null);
 
   useEffect(() => {
-    connection.current = new signalR.HubConnectionBuilder()
-      .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
-      .build();
-
     // connection.current = new signalR.HubConnectionBuilder()
-    //   .withUrl("http://localhost:5186/api/ws")
+    //   .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
     //   .build();
+
+    connection.current = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5186/api/ws")
+      .build();
 
     connection.current
       .start()
@@ -58,13 +58,15 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
     connection.current.on("messageReceived", (json: string) => {
       const message = JSON.parse(json) as GeneralMessage;
 
+      if (message.type === MessageTypes.General) {
+        setState(message.gameState);
+      }
+
       if (message.type === MessageTypes.VehicleState) {
         const stateMessage = JSON.parse(json) as VehicleStateMessage;
 
         setTanks(stateMessage.vehicles);
         setProjectiles(stateMessage.projectiles);
-      } else {
-        console.log(json);
       }
     });
 

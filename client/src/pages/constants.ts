@@ -18,6 +18,7 @@ const Constants = {
 }
 
 export const enum MessageTypes {
+  General,
   AddVehicle,
   VehicleState,
   UpdateVehicle,
