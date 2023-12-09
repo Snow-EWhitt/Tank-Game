@@ -1,6 +1,7 @@
 // import { User } from "oidc-client-ts";
 import { FC, ReactNode, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
+import { Spinner } from "./components/Spinner/Spinner";
 
 export const AuthRequired: FC<{ children: ReactNode }> = ({ children }) => {
   const auth = useAuth();
@@ -36,7 +37,18 @@ export const AuthRequired: FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   if (auth.isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Spinner />
+      </div>
+    );
   }
 
   if (auth.error) {
@@ -48,4 +60,4 @@ export const AuthRequired: FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   return <button onClick={() => void auth.signinRedirect()}>Log in</button>;
-}
+};

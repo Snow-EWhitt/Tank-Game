@@ -1,4 +1,4 @@
-import Constants from "../Constants";
+import Constants from "../constants";
 import { ProjectileType } from "./Tank/Projectile";
 
 export const moveProjectile = (p: ProjectileType) => {

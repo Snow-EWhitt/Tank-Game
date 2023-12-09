@@ -5,12 +5,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import TankContextProvider from "./components/Tank/TankContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Home } from "./pages/home/home";
+import { LocalMatch } from "./pages/localMatch/LocalMatch";
 import { Navbar } from "./components/Navbar";
 import { StartGamePage } from "./pages/startGame/StartGamePage";
 import { AuthProvider } from "react-oidc-context";
 import { WebStorageStateStore } from "oidc-client-ts";
 import { AuthRequired } from "./AuthRequired";
+import { GameMode } from "./pages/gameMode/GameMode";
+import { HostMatch } from "./pages/onlineMatch/HostMatch";
+import { OnlineOptions } from "./pages/onlineOptions/OnlineOptions";
+import OnlineHostContextProvider from "./components/contexts/OnlineHostContext";
+import { ClientMatch } from "./pages/onlineMatch/ClientMatch";
+import OnlineClientContextProvider from "./components/contexts/OnlineClientContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -34,8 +40,10 @@ root.render(
           <Router>
             <Navbar />
             <Routes>
-              <Route path="/" element={<StartGamePage />} />
-              <Route path="/Game" element={<Home />} />
+              <Route path="/" element={<GameMode />} />
+              <Route path="/Local" element={<StartGamePage />} />
+              <Route path="/Local/Game" element={<LocalMatch />} />
+              <Route path="/Online" element={<OnlineOptions />} />
             </Routes>
           </Router>
         </AuthRequired>

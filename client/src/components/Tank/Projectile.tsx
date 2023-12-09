@@ -1,4 +1,4 @@
-import Constants from "../../Constants";
+import Constants from "../../constants";
 
 export interface ProjectileType {
   id: number;

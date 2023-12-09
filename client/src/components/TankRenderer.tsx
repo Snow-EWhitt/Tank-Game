@@ -1,6 +1,6 @@
-import { useContext } from "react";
-import { TankContext } from "./Tank/TankContext";
 import { TankControls } from "./Tank/TankControls";
+import { TankContext } from "./Tank/TankContext";
+import { useContext } from "react";
 
 export const TankRenderer = () => {
   const tankContext = useContext(TankContext);
@@ -29,11 +29,27 @@ export const TankRenderer = () => {
     <>
       {tankContext.tanks.map((t) => {
         if (t.id === 0)
-          return <TankControls key={t.id} tankId={t.id} tankControls={player1Controls} />;
+          return (
+            <TankControls
+              key={t.id}
+              tankId={t.id}
+              tankControls={player1Controls}
+              context={TankContext}
+            />
+          );
         else if (t.id === 1)
-          return <TankControls key={t.id} tankId={t.id} tankControls={player2Controls} />;
+          return (
+            <TankControls
+              key={t.id}
+              tankId={t.id}
+              tankControls={player2Controls}
+              context={TankContext}
+            />
+          );
         else
-          return <TankControls key={t.id} tankId={t.id} />
+          return (
+            <TankControls key={t.id} tankId={t.id} context={TankContext} />
+          );
       })}
     </>
   );

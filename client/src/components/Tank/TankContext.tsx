@@ -1,24 +1,17 @@
-import Constants from "../../Constants";
+import Constants from "../../constants";
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { TankType } from "./Tank";
 import { ProjectileType } from "./Projectile";
 import { moveTank } from "./TankLogic";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
-
-export interface TankContextType {
-  tanks: TankType[];
-  resetTanks: () => void;
-  addTank: (id: number) => void;
-  updateTank: (id: number, action: string) => void;
-  projectiles: ProjectileType[];
-}
+import { TankContextType } from "../../contextTypes";
 
 export const TankContext = createContext<TankContextType>({
   tanks: [],
-  resetTanks: () => {},
   addTank: () => {},
   updateTank: () => {},
   projectiles: [],
+  resetTanks: () => {},
 });
 
 const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
@@ -179,10 +172,10 @@ const TankContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const startingValue: TankContextType = {
     tanks,
-    resetTanks,
     addTank,
     updateTank,
     projectiles,
+    resetTanks,
   };
 
   return (

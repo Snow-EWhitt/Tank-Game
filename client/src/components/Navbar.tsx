@@ -10,6 +10,11 @@ export const Navbar = () => {
               Home
             </Link>
           </div>
+          <div className="col-auto">
+            <Link to="/Local" className="text-reset text-decoration-none fs-5">
+              Local
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

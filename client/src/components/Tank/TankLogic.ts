@@ -1,4 +1,4 @@
-import Constants from "../../Constants";
+import Constants from "../../constants";
 import { TankType } from "./Tank";
 
 export const moveTank = (tank: TankType) => {

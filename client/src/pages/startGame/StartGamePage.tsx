@@ -7,16 +7,20 @@ export const StartGamePage = () => {
   const tankContext = useContext(TankContext);
 
   const startGame = () => {
-    tankContext.resetTanks();
+    // tankContext.resetTanks();
+
     tankContext.addTank(0);
     tankContext.addTank(1);
-
-    navigate("/Game");
+    
+    navigate("/Local/Game");
   };
 
   return (
     <div className="container">
-      <div className="position-absolute top-50 start-50 translate-middle">
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "calc(100vh - 49px)" }}
+      >
         <button className="btn btn-success" onClick={startGame}>
           Start Game
         </button>

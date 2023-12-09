@@ -1,9 +1,11 @@
-import { FC, useContext, useEffect } from "react";
+import { Context, FC, useContext, useEffect } from "react";
 import { Tank } from "./Tank";
-import { TankContext } from "./TankContext";
+import { TankContextType } from "../../contextTypes";
 
 interface TankControlsType {
   tankId: number;
+
+  context: Context<TankContextType>;
 
   tankControls?: {
     forwardKey: string;
@@ -20,19 +22,11 @@ interface TankControlsType {
 
 export const TankControls: FC<TankControlsType> = ({
   tankId,
+  context,
   tankControls,
 }) => {
-  const tankContext = useContext(TankContext);
+  const tankContext = useContext(context);
   const tank = tankContext.tanks.find((t) => t.id === tankId);
-
-  // useEffect(() => {
-  //   // console.log("Hi");
-
-  //   if (!tank) {
-  //     // console.log("Added tank.");
-  //     tankContext.addTank(tankId);
-  //   }
-  // }, [tankContext, tank, tankId]);
 
   useEffect(() => {
     if (tankControls) {

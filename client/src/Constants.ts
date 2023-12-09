@@ -17,4 +17,10 @@ const Constants = {
   projectileHeight: 16,
 }
 
+export const enum MessageTypes {
+  AddVehicle,
+  VehicleState,
+  UpdateVehicle,
+}
+
 export default Constants;
