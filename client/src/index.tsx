@@ -12,11 +12,7 @@ import { AuthProvider } from "react-oidc-context";
 import { WebStorageStateStore } from "oidc-client-ts";
 import { AuthRequired } from "./AuthRequired";
 import { GameMode } from "./pages/gameMode/GameMode";
-import { HostMatch } from "./pages/onlineMatch/HostMatch";
 import { OnlineOptions } from "./pages/onlineOptions/OnlineOptions";
-import OnlineHostContextProvider from "./components/contexts/OnlineHostContext";
-import { ClientMatch } from "./pages/onlineMatch/ClientMatch";
-import OnlineClientContextProvider from "./components/contexts/OnlineClientContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

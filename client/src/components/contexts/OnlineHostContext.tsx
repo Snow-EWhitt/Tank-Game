@@ -91,7 +91,7 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     connection.current = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5186/ws", {
+      .withUrl("https://tankbattles.duckdns.org:10007/ws", {
         skipNegotiation: true,
         transport: signalR.HttpTransportType.WebSockets,
       })

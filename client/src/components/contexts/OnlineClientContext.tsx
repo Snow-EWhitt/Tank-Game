@@ -38,7 +38,7 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     connection.current = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5186/ws")
+      .withUrl("https://tankbattles.duckdns.org:10007/ws")
       .build();
 
     connection.current
@@ -75,7 +75,7 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
   };
 
   const resetTanks = () => {
-    
+
   }
 
   const addTank = (id: number) => {
