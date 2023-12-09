@@ -7,13 +7,13 @@ import {
   useRef,
   useState,
 } from "react";
-import Constants, { MessageTypes } from "../../constants";
 import { TankContextType } from "../../contextTypes";
 // import Connector from "../../signalr-connection";
 import * as signalR from "@microsoft/signalr";
 import { moveTank } from "../Tank/TankLogic";
 import { ProjectileType } from "../Tank/Projectile";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
+import Constants, { MessageTypes } from "../../constants";
 
 export interface GeneralMessage {
   type: MessageTypes;
