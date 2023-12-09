@@ -1,4 +1,4 @@
-import Constants from "../../constants";
+import Constants from "../../pages/constants";
 
 
 export const TankGun = () => {

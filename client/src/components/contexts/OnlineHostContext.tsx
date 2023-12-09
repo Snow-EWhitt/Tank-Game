@@ -13,7 +13,7 @@ import * as signalR from "@microsoft/signalr";
 import { moveTank } from "../Tank/TankLogic";
 import { ProjectileType } from "../Tank/Projectile";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
-import Constants, { MessageTypes } from "../../constants";
+import Constants, { MessageTypes } from "../../pages/constants";
 
 export interface GeneralMessage {
   type: MessageTypes;

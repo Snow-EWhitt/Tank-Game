@@ -1,5 +1,5 @@
 
-import Constants from "../../constants";
+import Constants from "../../pages/constants";
 import { TankType } from "./Tank";
 
 export const moveTank = (tank: TankType) => {

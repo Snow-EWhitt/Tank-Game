@@ -4,7 +4,7 @@ import { ProjectileType } from "./Projectile";
 import { moveTank } from "./TankLogic";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
 import { TankContextType } from "../../contextTypes";
-import Constants from "../../constants";
+import Constants from "../../pages/constants";
 
 export const TankContext = createContext<TankContextType>({
   tanks: [],

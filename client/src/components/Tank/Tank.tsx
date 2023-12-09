@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { TankGun } from "./TankGun";
-import Constants from "../../constants";
+import Constants from "../../pages/constants";
 
 export interface TankType {
   id: number;

@@ -6,7 +6,7 @@ import {
   UpdateVehicleMessage,
   VehicleStateMessage,
 } from "./OnlineHostContext";
-import { MessageTypes } from "../../constants";
+import { MessageTypes } from "../../pages/constants";
 import {
   FC,
   ReactNode,

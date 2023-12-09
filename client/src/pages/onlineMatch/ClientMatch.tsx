@@ -1,7 +1,7 @@
 import { OnlineTankRenderer } from "../../components/OnlineTankRenderer";
 import { OnlineClientContext } from "../../components/contexts/OnlineClientContext";
 import { OnlineProjectileRenderer } from "../../components/OnlineProjectileRenderer";
-import Constants from "../../constants";
+import Constants from "../constants";
 
 export const ClientMatch = () => {
   return (

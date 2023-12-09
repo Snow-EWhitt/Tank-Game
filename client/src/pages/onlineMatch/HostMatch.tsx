@@ -1,4 +1,4 @@
-import Constants from "../../constants";
+import Constants from "../constants";
 import { OnlineTankRenderer } from "../../components/OnlineTankRenderer";
 import { OnlineHostContext } from "../../components/contexts/OnlineHostContext";
 import { OnlineProjectileRenderer } from "../../components/OnlineProjectileRenderer";

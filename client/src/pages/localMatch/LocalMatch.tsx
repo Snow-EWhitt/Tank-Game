@@ -3,7 +3,7 @@ import { ProjectileRenderer } from "../../components/ProjectileRenderer";
 import { TankRenderer } from "../../components/TankRenderer";
 import { TankContext } from "../../components/Tank/TankContext";
 import { MatchEndPage } from "../matchEnd/MatchEndPage";
-import Constants from "../../constants";
+import Constants from "../constants";
 
 export const LocalMatch = () => {
   const tankContext = useContext(TankContext);
