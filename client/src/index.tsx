@@ -14,6 +14,7 @@ import { AuthRequired } from "./AuthRequired";
 import { GameMode } from "./pages/gameMode/GameMode";
 import { OnlineOptions } from "./pages/onlineOptions/OnlineOptions";
 import { Toaster } from "react-hot-toast";
+import { Admin } from "./pages/Admin/Admin";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -32,8 +33,8 @@ const oidcConfig = {
 root.render(
   <React.StrictMode>
     <Toaster position="top-center" reverseOrder={true} />
-    <AuthProvider {...oidcConfig}>
-      <AuthRequired>
+    {/* <AuthProvider {...oidcConfig}> */}
+      {/* <AuthRequired> */}
         <TankContextProvider>
           <Router>
             <Navbar />
@@ -42,10 +43,11 @@ root.render(
               <Route path="/Local" element={<StartGamePage />} />
               <Route path="/Local/Game" element={<LocalMatch />} />
               <Route path="/Online" element={<OnlineOptions />} />
+              <Route path="/Admin" element={<Admin />} />
             </Routes>
           </Router>
         </TankContextProvider>
-      </AuthRequired>
-    </AuthProvider>
+      {/* </AuthRequired> */}
+    {/* </AuthProvider> */}
   </React.StrictMode>
 );

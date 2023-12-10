@@ -1,8 +1,8 @@
 const Constants = {
   // World variables
   refreshRate: 16.7,
-  boundaryWidth: window.innerWidth * 0.8,
-  boundaryHeight: window.innerHeight * 0.8,
+  boundaryWidth: 1250,
+  boundaryHeight: 600,
 
   // Tank variables
   tankSpeedConstant: 1.5,
