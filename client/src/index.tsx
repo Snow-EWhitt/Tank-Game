@@ -33,8 +33,8 @@ const oidcConfig = {
 root.render(
   <React.StrictMode>
     <Toaster position="top-center" reverseOrder={true} />
-    {/* <AuthProvider {...oidcConfig}> */}
-      {/* <AuthRequired> */}
+    <AuthProvider {...oidcConfig}>
+      <AuthRequired>
         <TankContextProvider>
           <Router>
             <Navbar />
@@ -47,7 +47,7 @@ root.render(
             </Routes>
           </Router>
         </TankContextProvider>
-      {/* </AuthRequired> */}
-    {/* </AuthProvider> */}
+      </AuthRequired>
+    </AuthProvider>
   </React.StrictMode>
 );
