@@ -13,10 +13,12 @@ import { moveTank } from "../Tank/TankLogic";
 import { ProjectileType } from "../Tank/Projectile";
 import { moveProjectile, projectileIsInBounds } from "../ProjectileLogic";
 import Constants, { GameState, MessageTypes } from "../../pages/constants";
+import toast from "react-hot-toast";
 
 export interface GeneralMessage {
   type: MessageTypes;
   gameState: GameState;
+  notification?: string;
 }
 
 export interface UpdateVehicleMessage {
@@ -83,6 +85,7 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
     const message: GeneralMessage = {
       type: MessageTypes.General,
       gameState: state,
+      notification: `State: ${state.toString()}`,
     };
 
     sendMessage(JSON.stringify(message));
@@ -146,12 +149,18 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
     connection.current.on("messageReceived", (json) => {
       const message = JSON.parse(json) as GeneralMessage;
 
+      if (message.type === MessageTypes.General) {
+        if (message.notification) toast(message.notification);
+      }
+
       if (message.type === MessageTypes.AddVehicle) {
         const addMessage = JSON.parse(json) as AddVehicleMessage;
 
         console.log("Adding tank...");
         addTank(addMessage.id);
-      } else if (message.type === MessageTypes.UpdateVehicle) {
+      }
+
+      if (message.type === MessageTypes.UpdateVehicle) {
         const updateMessage = JSON.parse(json) as UpdateVehicleMessage;
 
         console.log(updateMessage);

@@ -13,6 +13,7 @@ import { WebStorageStateStore } from "oidc-client-ts";
 import { AuthRequired } from "./AuthRequired";
 import { GameMode } from "./pages/gameMode/GameMode";
 import { OnlineOptions } from "./pages/onlineOptions/OnlineOptions";
+import { Toaster } from "react-hot-toast";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -30,9 +31,10 @@ const oidcConfig = {
 
 root.render(
   <React.StrictMode>
+    <Toaster position="top-center" reverseOrder={true} />
     <AuthProvider {...oidcConfig}>
-      <TankContextProvider>
-        <AuthRequired>
+      <AuthRequired>
+        <TankContextProvider>
           <Router>
             <Navbar />
             <Routes>
@@ -42,8 +44,8 @@ root.render(
               <Route path="/Online" element={<OnlineOptions />} />
             </Routes>
           </Router>
-        </AuthRequired>
-      </TankContextProvider>
+        </TankContextProvider>
+      </AuthRequired>
     </AuthProvider>
   </React.StrictMode>
 );

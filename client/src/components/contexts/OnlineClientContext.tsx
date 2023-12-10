@@ -18,6 +18,7 @@ import {
 // import Connector from "../../signalr-connection";
 import * as signalR from "@microsoft/signalr";
 import { ProjectileType } from "../Tank/Projectile";
+import toast from "react-hot-toast";
 
 export const OnlineClientContext = createContext<TankContextType>({
   state: GameState.Joining,
@@ -49,9 +50,14 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
     connection.current
       .start()
       .then(() => {
-        console.log("Connected to server...");
+        const message: GeneralMessage = {
+          type: MessageTypes.General,
+          gameState: GameState.Joining,
+          notification: "Client connected",
+        };
+
         addTank(1);
-        connection.current?.invoke("NewMessage", "Client connected...");
+        connection.current?.invoke("NewMessage", JSON.stringify(message));
       })
       .catch((err) => console.log(err));
 
@@ -60,6 +66,8 @@ const OnlineClientContextProvider: FC<{ children: ReactNode }> = ({
 
       if (message.type === MessageTypes.General) {
         setState(message.gameState);
+
+        if (message.notification) toast(message.notification);
       }
 
       if (message.type === MessageTypes.VehicleState) {

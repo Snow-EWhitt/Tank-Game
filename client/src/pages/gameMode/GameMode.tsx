@@ -7,7 +7,7 @@ export const GameMode = () => {
         className="d-flex justify-content-around align-items-center"
         style={{ height: "calc(100vh - 46px)" }}
       >
-        <LargeNavButton text="Local Game" route="/Local" />
+        <LargeNavButton text="Local Game" color="primary" route="/Local" />
         <LargeNavButton text="Online Game" route="/Online" />
       </div>
     </div>

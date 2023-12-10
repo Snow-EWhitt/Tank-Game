@@ -3,7 +3,7 @@ const Constants = {
   refreshRate: 16.7,
   boundaryWidth: window.innerWidth * 0.8,
   boundaryHeight: window.innerHeight * 0.8,
-  
+
   // Tank variables
   tankSpeedConstant: 1.5,
   barrelRotationRate: 1,
@@ -15,7 +15,7 @@ const Constants = {
   projectileSpeedConstant: 5,
   projectileWidth: 8,
   projectileHeight: 16,
-}
+};
 
 export const enum MessageTypes {
   General,
@@ -25,9 +25,9 @@ export const enum MessageTypes {
 }
 
 export const enum GameState {
-  Joining,
-  Playing,
-  Ended,
+  Joining = "Joining",
+  Playing = "Playing",
+  Ended = "Ended",
 }
 
 export default Constants;

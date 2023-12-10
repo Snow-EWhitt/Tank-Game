@@ -25,10 +25,11 @@ export const HostMatch = () => {
           >
             {hostContext.state === GameState.Joining && (
               <div className="d-flex flex-column justify-content-center align-items-center h-100">
-                <p className="fs-4 text-black">
-                  Waiting for player 2 to join...
-                </p>
-                {hostContext.tanks.length > 1 && (
+                {hostContext.tanks.length <= 1 ? (
+                  <p className="fs-4 text-black">
+                    Waiting for player 2 to join...
+                  </p>
+                ) : (
                   <button className="btn btn-success" onClick={startGame}>
                     Start Game
                   </button>
