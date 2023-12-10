@@ -1,5 +1,4 @@
-import { FormEvent, useState } from "react";
-import GenericInput, { useGenericInput } from "../../components/GenericInput";
+import { FormEvent } from "react";
 import GenericNumberInput, {
   useGenericNumberInput,
 } from "../../components/GenericNumberInput";
@@ -48,8 +47,6 @@ export const Admin = () => {
           <h2 className="mb-3">Settings</h2>
           <hr />
           <form className="form">
-            {/* <GenericInput controller={borderWidth} label="Boundary Width" />
-        <GenericInput controller={borderHeight} label="Boundary Height" /> */}
             <div className="row mb-5">
               <div className="col">
                 <GenericNumberInput
@@ -69,10 +66,10 @@ export const Admin = () => {
               </div>
             </div>
             <div className="mb-5">
-            <GenericSelect
-              controller={refreshRate}
-              label="Refresh Rate"
-              options={frameRateOptions}
+              <GenericSelect
+                controller={refreshRate}
+                label="Refresh Rate"
+                options={frameRateOptions}
               />
             </div>
             <button
