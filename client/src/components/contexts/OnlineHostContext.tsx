@@ -130,13 +130,13 @@ const OnlineHostContextProvider: FC<{ children: ReactNode }> = ({
   }, [tanks, projectiles]);
 
   useEffect(() => {
-    // connection.current = new signalR.HubConnectionBuilder()
-    //   .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
-    //   .build();
-
     connection.current = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:5186/api/ws")
+      .withUrl("https://tankbattles.duckdns.org:10007/api/ws")
       .build();
+
+    // connection.current = new signalR.HubConnectionBuilder()
+    //   .withUrl("http://localhost:5186/api/ws")
+    //   .build();
 
     connection.current
       .start()
